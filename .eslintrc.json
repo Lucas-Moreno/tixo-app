@@ -1,0 +1,16 @@
+{
+  "env": {
+    "node": true,
+    "jest": true
+  },
+  "extends": ["plugin:security/recommended", "plugin:jest/recommended",  "plugin:prettier/recommended"],
+  "plugins": ["jest", "security", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
+  "rules": {
+    "semi": ["warn", "never"],
+    "quotes": ["warn", "double"],
+    "jest/expect-expect": "off"
+  }
+}
