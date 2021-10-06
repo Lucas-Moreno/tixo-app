@@ -1,5 +1,5 @@
 import React from "react"
-import { View, Text, StyleSheet, Dimensions, TextInput, Button, TouchableOpacity } from "react-native"
+import { View, Text, StyleSheet, Dimensions, TextInput, Button } from "react-native"
 
 import { __ } from "../../utils/translation"
 import { appStyles } from "../../styles"
@@ -8,12 +8,12 @@ import LinearGradient from "react-native-linear-gradient"
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 
-const Connexion = (props) => {
+const Inscription = (props) => {
 
-
-  const goToInscription = () => {
-    props.navigation.push("Inscription")
+  const goToConnexion = () => {
+    props.navigation.goBack()
   }
+
 
   return (
     <LinearGradient colors={["#05C6AC", "#119FF1"]} style={styles.containerConnexion}>
@@ -21,24 +21,29 @@ const Connexion = (props) => {
         <Logo />
       </View>
       <View>
-        <Text style={styles.textConnexion}>{__("titleConnection")}</Text>
-        <Text style={styles.textAccount}>{__("subtitleConnection")}</Text>
+        <Text style={styles.textConnexion}>{__("titleInscription")}</Text>
+        <Text style={styles.textAccount}>{__("subtitleInscription")}</Text>
       </View>
       <View>
+        <Text style={styles.textInput}>{__("inputEmailUser")}</Text>
+        <TextInput autoFocus={true} style={styles.input} placeholder="E-mail" />
         <Text style={styles.textInput}>{__("inputNameUser")}</Text>
         <TextInput autoFocus={true} style={styles.input} placeholder="Nom d’utilisateur" />
         <Text style={styles.textInput}>{__("inputPassword")}</Text>
         <TextInput secureTextEntry={true} autoFocus={true} style={styles.input} placeholder="Mot de passe" />
-        <Text style={styles.forgotPassword}>{__("forgotPassword")}</Text>
       </View>
-      <TouchableOpacity>
-        <View style={styles.containerButton}>
-          <Text style={styles.textButton}>Connexion</Text>
-        </View>
-      </TouchableOpacity>
+      <View style={styles.containerButton}>
+        <Button
+          title={__("createAccount")}
+          color="#FBF7F2"
+          buttonStyle={{
+            height: 50,
+          }}
+        />
+      </View>
       <View style={styles.containerCreateAccount}>
-        <Text style={styles.noAccount}>{__("noAccountConnexion")}</Text>
-        <Text onPress={goToInscription} style={styles.createAccount}>{__("goToInscription")}</Text>
+        <Text style={styles.noAccount}>{__("noAccountInscription")}</Text>
+        <Text onPress={goToConnexion} style={styles.createAccount}>{__("goToConnexion")}</Text>
       </View>
     </LinearGradient>
   )
@@ -92,15 +97,6 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     color: appStyles.variables.colors.darkBlue,
   },
-  textButton:{
-    color:appStyles.variables.colors.whiteGray,
-    fontFamily: appStyles.variables.fontRegular,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    fontSize: 18,
-    textAlign: "center",
-    color: "#FBF7F2",
-  },
   forgotPassword: {
     fontFamily: appStyles.variables.fontRegular,
     fontStyle: "normal",
@@ -127,7 +123,6 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderRadius: 5,
     justifyContent: "center",
-    alignItems:'center'
   },
   containerCreateAccount: {
     flexDirection: "column",
@@ -154,4 +149,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Connexion
+export default Inscription

@@ -1,11 +1,19 @@
 {
   "nameApp":"Tixo",
   "connection":"Connexion",
+  "inscription":"Inscription",
   "titleConnection":"Se Connecter",
+  "titleInscription":"Inscription",
   "subtitleConnection":"Connectez-vous à votre compte",
+  "subtitleInscription":"Création de votre compte",
+  "inputEmailUser":"E-mail",
   "inputNameUser":"Nom d’utilisateur",
   "inputPassword":"Mot de passe",
-  "forgotPassword":"Mot de passe oubllié ?",
-  "noAccount":"Pas encore de compte ?",
-  "createAccount":"Créer un compte"
+  "createAccount":"Créer un compte",
+  "forgotPassword":"Mot de passe oublié ?",
+  "noAccountConnexion":"Pas encore de compte ?",
+  "noAccountInscription":"Déja un compte ?",
+  "goToInscription":"Créer un compte",
+  "goToConnexion":"Se connecter"
+
 }
