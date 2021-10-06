@@ -1,0 +1,11 @@
+{
+  "nameApp":"Tixo",
+  "connection":"Connexion",
+  "titleConnection":"Se Connecter",
+  "subtitleConnection":"Connectez-vous à votre compte",
+  "inputNameUser":"Nom d’utilisateur",
+  "inputPassword":"Mot de passe",
+  "forgotPassword":"Mot de passe oubllié ?",
+  "noAccount":"Pas encore de compte ?",
+  "createAccount":"Créer un compte"
+}
