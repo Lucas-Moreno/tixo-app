@@ -1,17 +1,42 @@
-import React from "react"
-import { View, Text, StyleSheet, Dimensions, TextInput, Button } from "react-native"
+import React,{useState} from "react"
+import { View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity } from "react-native"
 
 import { __ } from "../../utils/translation"
 import { appStyles } from "../../styles"
 import Logo from "../../components/logo/logo"
 import LinearGradient from "react-native-linear-gradient"
+import axios from "axios"
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 
 const Inscription = (props) => {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [name, setName] = useState("")
+  const [message, setMessage] = useState("")
 
   const goToConnexion = () => {
     props.navigation.goBack()
+  }
+  const goToOnBoarding = (e) => {
+
+    e.preventDefault()
+
+    let body = {
+      mail: email,
+      pseudo: name,
+      password: password,
+    }
+
+    axios.post(`http://localhost:80/auth/register`, body).then((res) => {
+      setMessage(res.data.message)
+    })
+
+    if(message === "create"){
+      props.navigation.push('OnBoarding')
+    }else{
+      console.log('problème d\'inscription')
+    }
   }
 
 
@@ -26,21 +51,17 @@ const Inscription = (props) => {
       </View>
       <View>
         <Text style={styles.textInput}>{__("inputEmailUser")}</Text>
-        <TextInput autoFocus={true} style={styles.input} placeholder="E-mail" />
+        <TextInput autoFocus={true} style={styles.input} placeholder="E-mail" value={email} onChangeText={(text) => setEmail(text)} />
         <Text style={styles.textInput}>{__("inputNameUser")}</Text>
-        <TextInput autoFocus={true} style={styles.input} placeholder="Nom d’utilisateur" />
+        <TextInput autoFocus={true} style={styles.input} placeholder="Nom d’utilisateur" value={name} onChangeText={(text) => setName(text)}/>
         <Text style={styles.textInput}>{__("inputPassword")}</Text>
-        <TextInput secureTextEntry={true} autoFocus={true} style={styles.input} placeholder="Mot de passe" />
+        <TextInput secureTextEntry={true} autoFocus={true} style={styles.input} placeholder="Mot de passe" value={password} onChangeText={(text) => setPassword(text)} />
       </View>
-      <View style={styles.containerButton}>
-        <Button
-          title={__("createAccount")}
-          color="#FBF7F2"
-          buttonStyle={{
-            height: 50,
-          }}
-        />
-      </View>
+      <TouchableOpacity onPress={goToOnBoarding}>
+        <View style={styles.containerButton}>
+          <Text style={styles.textButton}>Créer un compte</Text>
+        </View>
+      </TouchableOpacity>
       <View style={styles.containerCreateAccount}>
         <Text style={styles.noAccount}>{__("noAccountInscription")}</Text>
         <Text onPress={goToConnexion} style={styles.createAccount}>{__("goToConnexion")}</Text>
@@ -96,6 +117,15 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingLeft: 10,
     color: appStyles.variables.colors.darkBlue,
+  },
+  textButton:{
+    color:appStyles.variables.colors.whiteGray,
+    fontFamily: appStyles.variables.fontRegular,
+    fontStyle: "normal",
+    fontWeight: "normal",
+    fontSize: 18,
+    textAlign: "center",
+    color: "#FBF7F2",
   },
   forgotPassword: {
     fontFamily: appStyles.variables.fontRegular,

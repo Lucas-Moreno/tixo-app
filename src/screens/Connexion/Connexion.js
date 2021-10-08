@@ -1,20 +1,44 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { View, Text, StyleSheet, Dimensions, TextInput, Button, TouchableOpacity } from "react-native"
 
 import { __ } from "../../utils/translation"
 import { appStyles } from "../../styles"
 import Logo from "../../components/logo/logo"
 import LinearGradient from "react-native-linear-gradient"
+import axios from "axios"
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 
 const Connexion = (props) => {
-
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [token, setToken] = useState("")
 
   const goToInscription = () => {
     props.navigation.push("Inscription")
   }
 
+
+  const goToHome = (e) => {
+    e.preventDefault()
+
+    let body = {
+      mail: email,
+      password: password,
+    }
+
+    axios.post(`http://localhost:80/auth/login`, body).then((res) => {
+      setToken(res.data.token)
+    })
+
+    if(token.length > 0){
+      props.navigation.push("Home")
+    }else{
+      console.log('mot de passe ou email incorrecte')
+    }
+  }
+
+  console.log(token)
   return (
     <LinearGradient colors={["#05C6AC", "#119FF1"]} style={styles.containerConnexion}>
       <View style={styles.containerLogo}>
@@ -25,20 +49,31 @@ const Connexion = (props) => {
         <Text style={styles.textAccount}>{__("subtitleConnection")}</Text>
       </View>
       <View>
-        <Text style={styles.textInput}>{__("inputNameUser")}</Text>
-        <TextInput autoFocus={true} style={styles.input} placeholder="Nom d’utilisateur" />
+        <Text style={styles.textInput}>{__("inputEmailUser")}</Text>
+        <TextInput autoFocus={true} style={styles.input} placeholder="E-mail" value={email} onChangeText={(text) => setEmail(text)} />
         <Text style={styles.textInput}>{__("inputPassword")}</Text>
-        <TextInput secureTextEntry={true} autoFocus={true} style={styles.input} placeholder="Mot de passe" />
+        <TextInput
+          // secureTextEntry={true}
+          autoFocus={true}
+          style={styles.input}
+          placeholder="Mot de passe"
+          value={password}
+          onChangeText={(text) => setPassword(text)}
+        />
         <Text style={styles.forgotPassword}>{__("forgotPassword")}</Text>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={goToHome}>
         <View style={styles.containerButton}>
-          <Text style={styles.textButton}>Connexion</Text>
+          <Text style={styles.textButton}>
+            Connexion
+          </Text>
         </View>
       </TouchableOpacity>
       <View style={styles.containerCreateAccount}>
         <Text style={styles.noAccount}>{__("noAccountConnexion")}</Text>
-        <Text onPress={goToInscription} style={styles.createAccount}>{__("goToInscription")}</Text>
+        <Text onPress={goToInscription} style={styles.createAccount}>
+          {__("goToInscription")}
+        </Text>
       </View>
     </LinearGradient>
   )
@@ -92,8 +127,8 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     color: appStyles.variables.colors.darkBlue,
   },
-  textButton:{
-    color:appStyles.variables.colors.whiteGray,
+  textButton: {
+    color: appStyles.variables.colors.whiteGray,
     fontFamily: appStyles.variables.fontRegular,
     fontStyle: "normal",
     fontWeight: "normal",
@@ -127,7 +162,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     borderRadius: 5,
     justifyContent: "center",
-    alignItems:'center'
+    alignItems: "center",
   },
   containerCreateAccount: {
     flexDirection: "column",
