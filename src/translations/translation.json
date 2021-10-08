@@ -14,6 +14,7 @@
   "noAccountConnexion":"Pas encore de compte ?",
   "noAccountInscription":"Déja un compte ?",
   "goToInscription":"Créer un compte",
-  "goToConnexion":"Se connecter"
+  "goToConnexion":"Se connecter",
+  "errorGlobal":"Oups! Une erreur est survenue."
 
 }
