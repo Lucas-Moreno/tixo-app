@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 5,
     width: SCREEN_WIDTH - 100,
-    height: 40,
+    height: 45,
     marginBottom: 8,
     paddingLeft: 10,
     color: appStyles.variables.colors.darkBlue,

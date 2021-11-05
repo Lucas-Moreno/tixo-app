@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react"
-import { View, Text, StyleSheet, Dimensions, TextInput, Button, TouchableOpacity } from "react-native"
+import { View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity } from "react-native"
 
 import { __ } from "../../utils/translation"
 import { appStyles } from "../../styles"
 import Logo from "../../components/logo/logo"
 import LinearGradient from "react-native-linear-gradient"
 import axios from "axios"
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 
@@ -13,11 +14,11 @@ const Connexion = (props) => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [token, setToken] = useState("")
+  const [id, setId] = useState("")
 
   const goToInscription = () => {
     props.navigation.push("Inscription")
   }
-
 
   const goToHome = (e) => {
     e.preventDefault()
@@ -28,15 +29,24 @@ const Connexion = (props) => {
     }
 
     axios.post(`http://localhost:80/auth/login`, body).then((res) => {
+      setId(res.data.id)
       setToken(res.data.token)
     })
-
-    if(token.length > 0){
-      props.navigation.push("Home")
-    }else{
-      console.log('mot de passe ou email incorrecte')
-    }
+    // _storeData();
+    // if(token.length > 0){
+    //   props.navigation.push("Home")
+    // }else{
+    //   addToast(__('errorGlobal'), TOAST_TYPES.error);
+    // }
   }
+
+  // _storeData = async () => {
+  //   try {
+  //     await AsyncStorage.setItem(token)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
   console.log(token)
   return (
@@ -64,9 +74,7 @@ const Connexion = (props) => {
       </View>
       <TouchableOpacity onPress={goToHome}>
         <View style={styles.containerButton}>
-          <Text style={styles.textButton}>
-            Connexion
-          </Text>
+          <Text style={styles.textButton}>Connexion</Text>
         </View>
       </TouchableOpacity>
       <View style={styles.containerCreateAccount}>
@@ -122,7 +130,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 5,
     width: SCREEN_WIDTH - 100,
-    height: 40,
+    height: 45,
     marginBottom: 8,
     paddingLeft: 10,
     color: appStyles.variables.colors.darkBlue,
