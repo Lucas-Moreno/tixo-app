@@ -6,7 +6,8 @@ export const variables = {
     lightBlue:"#119FF1",
     blue:"#4064FF",
     green:"#05C6AC",
-    darkBlue:"#1B0867"
+    darkBlue:"#1B0867",
+    red: "#FF0000",
   },
 
   fontLight: 'Poppins-Light',

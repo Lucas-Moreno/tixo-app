@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity } from "react-native"
-
 import { __ } from "../../utils/translation"
 import { appStyles } from "../../styles"
 import Logo from "../../components/logo/logo"
 import LinearGradient from "react-native-linear-gradient"
-import axios from "axios"
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from "../../context/AuthContext"
+import { login } from "../../api/routes"
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 
@@ -15,12 +14,15 @@ const Connexion = (props) => {
   const [password, setPassword] = useState("")
   const [token, setToken] = useState("")
   const [id, setId] = useState("")
+  const [parameters, setParameters] = useState(false)
+
+  const { signIn } = useContext(AuthContext)
 
   const goToInscription = () => {
     props.navigation.push("Inscription")
   }
 
-  const goToHome = (e) => {
+  const goToHome = async (e) => {
     e.preventDefault()
 
     let body = {
@@ -28,27 +30,16 @@ const Connexion = (props) => {
       password: password,
     }
 
-    axios.post(`http://localhost:80/auth/login`, body).then((res) => {
-      setId(res.data.id)
-      setToken(res.data.token)
-    })
-    // _storeData();
-    // if(token.length > 0){
-    //   props.navigation.push("Home")
-    // }else{
-    //   addToast(__('errorGlobal'), TOAST_TYPES.error);
-    // }
+    let response = await login(body)
+    if (response === null) {
+      setParameters(true)
+    } else {
+      setId(response.id)
+      setToken(response.token)
+      signIn(token)
+    }
   }
 
-  // _storeData = async () => {
-  //   try {
-  //     await AsyncStorage.setItem(token)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-
-  console.log(token)
   return (
     <LinearGradient colors={["#05C6AC", "#119FF1"]} style={styles.containerConnexion}>
       <View style={styles.containerLogo}>
@@ -58,20 +49,39 @@ const Connexion = (props) => {
         <Text style={styles.textConnexion}>{__("titleConnection")}</Text>
         <Text style={styles.textAccount}>{__("subtitleConnection")}</Text>
       </View>
-      <View>
-        <Text style={styles.textInput}>{__("inputEmailUser")}</Text>
-        <TextInput autoFocus={true} style={styles.input} placeholder="E-mail" value={email} onChangeText={(text) => setEmail(text)} />
-        <Text style={styles.textInput}>{__("inputPassword")}</Text>
-        <TextInput
-          // secureTextEntry={true}
-          autoFocus={true}
-          style={styles.input}
-          placeholder="Mot de passe"
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-        />
-        <Text style={styles.forgotPassword}>{__("forgotPassword")}</Text>
-      </View>
+      {parameters ? (
+        <View>
+          <Text style={styles.textInput}>{__("inputEmailUser")}</Text>
+          <TextInput autoFocus={true} style={styles.input} placeholder="E-mail" value={email} onChangeText={(text) => setEmail(text)} />
+          <Text style={styles.invalidParameters}>Votre email n'est pas correcte</Text>
+          <Text style={styles.textInput}>{__("inputPassword")}</Text>
+          <TextInput
+            // secureTextEntry={true}
+            autoFocus={true}
+            style={styles.input}
+            placeholder="Mot de passe"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+          />
+          <Text style={styles.invalidParameters}>Votre mot de passe n'est pas correcte</Text>
+          <Text style={styles.forgotPassword}>{__("forgotPassword")}</Text>
+        </View>
+      ) : (
+        <View>
+          <Text style={styles.textInput}>{__("inputEmailUser")}</Text>
+          <TextInput autoFocus={true} style={styles.input} placeholder="E-mail" value={email} onChangeText={(text) => setEmail(text)} />
+          <Text style={styles.textInput}>{__("inputPassword")}</Text>
+          <TextInput
+            // secureTextEntry={true}
+            autoFocus={true}
+            style={styles.input}
+            placeholder="Mot de passe"
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+          />
+          <Text style={styles.forgotPassword}>{__("forgotPassword")}</Text>
+        </View>
+      )}
       <TouchableOpacity onPress={goToHome}>
         <View style={styles.containerButton}>
           <Text style={styles.textButton}>Connexion</Text>
@@ -134,6 +144,12 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingLeft: 10,
     color: appStyles.variables.colors.darkBlue,
+  },
+  invalidParameters: {
+    color: appStyles.variables.colors.red,
+    fontFamily: appStyles.variables.fontRegular,
+    marginBottom: 5,
+    marginLeft: 2,
   },
   textButton: {
     color: appStyles.variables.colors.whiteGray,

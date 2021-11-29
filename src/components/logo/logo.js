@@ -1,6 +1,6 @@
 import React from "react"
 import { Text, View, StyleSheet, Image } from "react-native"
-import { logoBlue } from "../../assets/index"
+import { logoBlue } from "../../assets"
 import { __ } from "../../utils/translation"
 import { appStyles } from "../../styles"
 

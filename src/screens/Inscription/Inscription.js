@@ -5,7 +5,7 @@ import { __ } from "../../utils/translation"
 import { appStyles } from "../../styles"
 import Logo from "../../components/logo/logo"
 import LinearGradient from "react-native-linear-gradient"
-import axios from "axios"
+import { register } from "../../api/routes"
 
 const SCREEN_WIDTH = Dimensions.get("window").width
 
@@ -18,7 +18,7 @@ const Inscription = (props) => {
     props.navigation.goBack()
   }
 
-  const goToOnBoarding = (e) => {
+  const goToOnBoarding = async (e) => {
     e.preventDefault()
 
     let body = {
@@ -27,13 +27,10 @@ const Inscription = (props) => {
       password: password,
     }
 
-    axios.post(`http://localhost:80/auth/register`, body)
-    .then((res) => {
+    let response = await register(body)
+    if(response){
       props.navigation.push('OnBoarding')
-    })
-    .catch((e) =>{
-      console.log(e.message)
-    })
+    }
   }
 
   return (
